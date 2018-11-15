@@ -1,0 +1,24 @@
+---
+
+- name: Create our custom Document Root folder
+  file: path=/usr/apache state=directory mode=0777
+
+- name: Configure Document Root folder in Ubuntu
+  when: ansible_distribution == "Ubuntu"
+  copy: src=000-default.conf dest=/etc/apache2/sites-available/000-default.conf backup=yes
+  notify:
+     - Restart apache web server in Ubuntu
+
+- name: Configure apache port in Ubuntu
+  when: ansible_distribution == "Ubuntu"
+  copy: src=ports.conf dest=/etc/apache2/ports.conf backup=yes
+  notify:
+    - Restart apache web server in Ubuntu
+
+- name: Configure Document Root folder and Port in CentOS 
+  when: ansible_distribution == "CentOS"
+  copy: src=httpd.conf dest=/etc/httpd/conf/httpd.conf backup=yes
+  notify:
+    - Restart httpd web server in CentOS 
+ 
+...

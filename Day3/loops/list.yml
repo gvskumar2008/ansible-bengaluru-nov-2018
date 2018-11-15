@@ -1,0 +1,15 @@
+- name: Demonstrates use of list variable and ways to navigate the values in list
+  hosts: all
+  become: yes
+  vars_files:
+     - software_tools_file
+  tasks:
+    - name: Install the software tools in Ubuntu
+      when: ansible_distribution == "Ubuntu"
+      apt: name="{{item}}" state=latest update_cache=yes
+      with_list: "{{software_tools}}"
+
+    - name: Install the software tools in CentOS 
+      when: ansible_distribution == "CentOS"
+      apt: name="{{item}}" state=latest update_cache=yes
+      with_list: "{{software_tools}}"

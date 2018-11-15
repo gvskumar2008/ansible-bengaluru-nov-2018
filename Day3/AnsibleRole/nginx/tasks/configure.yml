@@ -1,0 +1,18 @@
+---
+
+- name: Create the nginx web home folder
+  file: path=/usr/nginx state=directory mode=0777
+
+- name: Configure nginx web home folder in Ubuntu
+  when: ansible_distribution == "Ubuntu"
+  copy: src=default dest=/etc/nginx/sites-available/default
+  notify:
+     - Restart nginx web server
+
+- name: Configure nginx web home folder in CentOS 
+  when: ansible_distribution == "CentOS"
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify:
+     - Restart nginx web server
+
+...

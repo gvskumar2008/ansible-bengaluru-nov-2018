@@ -1,0 +1,8 @@
+---
+
+- name: Deploy our customized web page in nginx web server
+  template: 
+     src: index.html.j2 
+     dest: /usr/nginx/index.html
+
+...

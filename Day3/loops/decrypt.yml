@@ -1,0 +1,15 @@
+- name: Decrypt the playbook
+  hosts: localhost
+  pre_tasks:
+   - name: Decrypt playbook
+     shell: ansible-vault decrypt dictionary.yml
+  
+  tasks:
+   - name: Invoke the playbook
+     shell: ansible-playbook dictionary.yml
+
+  post_tasks:
+   - name: Invoke the playbook
+     shell: ansible-vault encrypt dictionary.yml 
+   
+      

@@ -1,0 +1,11 @@
+- name: Demonstrates creating new machines on the fly
+  hosts: localhost
+  tasks:
+   - name: Create an ubuntu vm
+     docker_container:
+        image: "tektutor/ansible-ubuntu"
+        name: "ubuntu{{item}}"
+        ports:
+          - "708{{item}}:80"  
+          - "200{{item}}:22"  
+     with_sequence: start=1 end=5

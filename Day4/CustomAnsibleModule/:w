@@ -1,0 +1,20 @@
+- name: Demonstrates invoking our custom ansible module
+  hosts: all
+  ignore_errors: True
+  tasks:
+    - name: Invoke the hello ansible module
+      hello: mesage="Hello Ansible Module!"
+      register: output
+
+    - debug: msg="Hello module invocation failed"
+      when: output.failed == true 
+
+    - debug: msg="Hello module invocation succeeded"
+      when: output.failed == false 
+
+    - name: Invoke the add ansible module
+      add: firstNumber=100.5 secondNumber=200.5
+      register: output
+
+    - debug: msg="Result is {{output}}"
+      when: output.failed is false

@@ -1,0 +1,8 @@
+---
+- name: Demo of simple playbook
+  hosts: all
+  gather_facts: false 
+  tasks:
+   - name: Ping the remote machine
+     ping:
+...

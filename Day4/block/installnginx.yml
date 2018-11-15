@@ -1,0 +1,87 @@
+- name: Demonstrates installing, configuring and deploying web page in nginx
+  hosts: all
+  become: yes
+  vars:
+    - greeting_msg: DevOps
+  vars_files:
+    - my_variables_file
+
+  handlers:
+    - name: Restart the nginx web server
+      service: name=nginx state=restarted 
+  tasks:
+  - block:
+     - name: Install nginx web server in Ubuntu
+       apt: name=nginx state=latest update_cache=yes
+
+     - name: Configure nginx web root folder in Ubuntu
+       copy: src=default dest=/etc/nginx/sites-available/default
+
+     - name: Create nginx web root folder
+       file: path=/usr/nginx state=directory mode=0777
+
+     - name: Deploy our web page into nginx web server
+       template: src=index.html.j2 dest=/usr/nginx/index.html
+       notify:
+         - Restart the nginx web server
+    rescue:
+      - debug: msg="nginx installation failed in Ubuntu"
+    always:
+      - debug: msg="Always this message will be printed irrespective pass or fail"
+
+    when: ( ansible_distribution == "Ubuntu" and ansible_os_family == "Debian" )
+
+
+  - block:
+     - name: Install epel-release package in CentOS
+       yum: name=epel-release state=latest 
+
+     - name: Install nginx web server in CentOS
+       yum: name=nginx state=latest 
+       notify:
+         - Restart the nginx web server
+
+     - name: Configure nginx web root folder in CentOS 
+       copy: 
+        src: nginx.conf 
+        dest: /etc/nginx/nginx.conf
+        backup: yes
+       notify:
+         - Restart the nginx web server
+    
+     - name: Create nginx web root folder
+       file: path=/usr/nginx state=directory mode=0777
+
+     - name: Deploy our web page into nginx web server
+       template: src=index.html.j2 dest=/usr/nginx/index.html
+       notify:
+         - Restart the nginx web server
+
+    when: ( ansible_distribution == "CentOS" and ansible_os_family == "RedHat" )
+
+
+- name: Check if nginx web server is up and running
+  hosts: localhost
+  tasks:
+    - name: Access the nginx home page in Ubuntu
+      shell: curl http://localhost:8080
+      register: output
+
+    - debug: var=output
+
+    - name: Access the nginx home page in CentOS 
+      shell: curl http://localhost:8082
+      register: output
+
+    - debug: var=output
+
+
+
+
+
+
+
+
+    
+
+      
