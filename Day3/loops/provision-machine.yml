@@ -8,4 +8,4 @@
         ports:
           - "708{{item}}:80"  
           - "200{{item}}:22"  
-     with_sequence: start=1 end=5
+     with_sequence: start=0 end=9

@@ -1,0 +1,10 @@
+- name: Demonstrates delegation
+  hosts: all
+  tasks:
+    - name: This task must be executed locally
+      apt: name=tree state=absent
+      delegate_to: localhost
+      when: ansible_distribution == "Ubuntu" 
+
+    - name: This task must be executed on remote machines
+      debug: var=ansible_host

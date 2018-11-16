@@ -1,0 +1,9 @@
+- name: Demonstrates rolling update in batches of 3 machines at a time
+  hosts: all
+  serial: 3
+  tasks:
+    - name: Perform rolling update on remote machine
+      debug: msg="Rolled out new version of product"
+      #command: /bin/false
+
+    - debug: msg="******************"

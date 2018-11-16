@@ -1,0 +1,22 @@
+- name: Demostrates custom facts using jinja2 templating
+  hosts: all
+  vars:
+    java_is_installed_successfully: false
+  become: yes
+  tasks:
+    - name: Install JDK
+      command: /bin/false
+      register: output
+      ignore_errors: True
+
+    - debug: var=output
+
+    - name: Define our own custom fact
+      set_fact:  
+         java_is_installed_successfully: "{{ true if output.failed == false else false if output.failed == true }}"
+
+    - debug: msg="JDK installed successfully"
+      when: java_is_installed_successfully == true 
+
+    - debug: msg="JDK installation failed"
+      when: java_is_installed_successfully == false 
